@@ -3,6 +3,7 @@ package io.github.dscatalog.services;
 import io.github.dscatalog.dto.CategoryDTO;
 import io.github.dscatalog.entities.Category;
 import io.github.dscatalog.repositories.CategoryRepository;
+import io.github.dscatalog.services.exceptions.AttributeNullOrEmptyException;
 import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,4 +33,18 @@ public class CategoryService {
         return new CategoryDTO(entity);
     }
 
+    @Transactional
+    public CategoryDTO insert(CategoryDTO categoryDTO) {
+
+        if (categoryDTO.getName().isEmpty() || categoryDTO.getName() == null) {
+            throw new AttributeNullOrEmptyException("Every attribute of object must be filled.");
+        }
+
+        Category category = Category.builder()
+                .name(categoryDTO.getName())
+                .build();
+
+        Category savedCategory = repository.save(category);
+        return new CategoryDTO(savedCategory);
+    }
 }
