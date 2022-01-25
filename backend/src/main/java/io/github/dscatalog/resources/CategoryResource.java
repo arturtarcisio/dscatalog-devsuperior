@@ -1,6 +1,7 @@
 package io.github.dscatalog.resources;
 
 import io.github.dscatalog.dto.CategoryDTO;
+import io.github.dscatalog.entities.Category;
 import io.github.dscatalog.services.CategoryService;
 import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.apache.coyote.Response;
@@ -46,6 +47,12 @@ public class CategoryResource {
     public ResponseEntity<CategoryDTO> update(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id) {
         CategoryDTO dto = service.update(categoryDTO, id);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

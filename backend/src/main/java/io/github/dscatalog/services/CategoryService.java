@@ -4,8 +4,11 @@ import io.github.dscatalog.dto.CategoryDTO;
 import io.github.dscatalog.entities.Category;
 import io.github.dscatalog.repositories.CategoryRepository;
 import io.github.dscatalog.services.exceptions.AttributeNullOrEmptyException;
+import io.github.dscatalog.services.exceptions.DataBaseException;
 import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,20 +68,16 @@ public class CategoryService {
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("ID invalid. Resource not found!");
         }
-
     }
 
-    private String idExist (Long id) {
-        String idExist = "false";
-        List<Category> list = new ArrayList<>();
-        list = repository.findAll();
-        for (Category category : list) {
-            if (id.equals(category.getId())) {
-                idExist = "true";
-                break;
-            }
+    @Transactional
+    public void delete(Long id) {
+        try{
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("ID invalid. Resource not found!");
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException("Integrity violation!");
         }
-        return idExist;
     }
-
 }

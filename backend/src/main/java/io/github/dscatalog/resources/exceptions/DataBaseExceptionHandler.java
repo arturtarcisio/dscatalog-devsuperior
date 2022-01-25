@@ -11,18 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 
 @ControllerAdvice
-public class ResourceNotFoundExceptionHandler {
+public class DataBaseExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<StandardError> entityNotFound(ResourceNotFoundException e, HttpServletRequest request) {
-        HttpStatus statusNotFound = HttpStatus.NOT_FOUND;
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<StandardError> databaseIntegrityViolation(DataBaseException e, HttpServletRequest request) {
+        HttpStatus statusBadRequest = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError();
         err.setTimestamp(Instant.now());
-        err.setStatus(statusNotFound.value());
-        err.setError("Resource not found!");
+        err.setStatus(statusBadRequest.value());
+        err.setError("Database exception!");
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
-        return ResponseEntity.status(statusNotFound).body(err);
+        return ResponseEntity.status(statusBadRequest).body(err);
     }
 
 }
