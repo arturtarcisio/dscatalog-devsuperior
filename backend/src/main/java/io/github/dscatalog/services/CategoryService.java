@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,4 +50,35 @@ public class CategoryService {
         Category savedCategory = repository.save(category);
         return new CategoryDTO(savedCategory);
     }
+
+    @Transactional
+    public CategoryDTO update(CategoryDTO categoryDTO, Long id) {
+
+        if (categoryDTO.getName().isEmpty() || categoryDTO.getName() == null) {
+            throw new AttributeNullOrEmptyException("Every attribute of object must be filled.");
+        }
+        try {
+            Category entity = repository.getOne(id);
+            entity.setName(categoryDTO.getName());
+            entity = repository.save(entity);
+            return new CategoryDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("ID invalid. Resource not found!");
+        }
+
+    }
+
+    private String idExist (Long id) {
+        String idExist = "false";
+        List<Category> list = new ArrayList<>();
+        list = repository.findAll();
+        for (Category category : list) {
+            if (id.equals(category.getId())) {
+                idExist = "true";
+                break;
+            }
+        }
+        return idExist;
+    }
+
 }

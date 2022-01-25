@@ -3,6 +3,7 @@ package io.github.dscatalog.resources;
 import io.github.dscatalog.dto.CategoryDTO;
 import io.github.dscatalog.services.CategoryService;
 import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,12 @@ public class CategoryResource {
                 .buildAndExpand(categoryDTO.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(categoryDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryDTO> update(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id) {
+        CategoryDTO dto = service.update(categoryDTO, id);
+        return ResponseEntity.ok().body(dto);
     }
 
 }
