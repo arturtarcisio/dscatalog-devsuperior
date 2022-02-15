@@ -25,7 +25,7 @@ public class ProductDTO implements Serializable {
     private Double price;
     private String imgUrl;
     private Instant date;
-    private List<CategoryDTO> categoryDTOS = new ArrayList<>();
+    private List<CategoryDTO> categories = new ArrayList<>();
 
     public ProductDTO(Product entity){
         this.id = entity.getId();
@@ -38,6 +38,6 @@ public class ProductDTO implements Serializable {
 
     public ProductDTO(Product entity, Set<Category> categories) {
         this(entity);
-        categories.forEach(cat -> this.categoryDTOS.add(new CategoryDTO(cat)));
+        categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
     }
 }

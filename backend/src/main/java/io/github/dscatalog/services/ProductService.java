@@ -1,7 +1,10 @@
 package io.github.dscatalog.services;
 
+import io.github.dscatalog.dto.CategoryDTO;
 import io.github.dscatalog.dto.ProductDTO;
+import io.github.dscatalog.entities.Category;
 import io.github.dscatalog.entities.Product;
+import io.github.dscatalog.repositories.CategoryRepository;
 import io.github.dscatalog.repositories.ProductRepository;
 import io.github.dscatalog.services.exceptions.AttributeNullOrEmptyException;
 import io.github.dscatalog.services.exceptions.DataBaseException;
@@ -23,6 +26,9 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged (PageRequest pageRequest) {
         Page<Product> list = repository.findAll(pageRequest);
@@ -37,29 +43,18 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO insert(ProductDTO productDTO) {
-
-        if (productDTO.getName().isEmpty() || productDTO.getName() == null) {
-            throw new AttributeNullOrEmptyException("Every attribute of object must be filled.");
-        }
-
-        Product product = Product.builder()
-                //.name(productDTO.getName())
-                .build();
-
-        Product savedProduct = repository.save(product);
-        return new ProductDTO(savedProduct);
+    public ProductDTO insert(ProductDTO dto) {
+        Product entity = new Product();
+        copyDTOtoEntity(dto, entity);
+        entity = repository.save(entity);
+        return new ProductDTO(entity);
     }
 
     @Transactional
-    public ProductDTO update(ProductDTO productDTO, Long id) {
-
-        if (productDTO.getName().isEmpty() || productDTO.getName() == null) {
-            throw new AttributeNullOrEmptyException("Every attribute of object must be filled.");
-        }
+    public ProductDTO update(Long id, ProductDTO dto) {
         try {
             Product entity = repository.getOne(id);
-            entity.setName(productDTO.getName());
+            copyDTOtoEntity(dto, entity);
             entity = repository.save(entity);
             return new ProductDTO(entity);
         } catch (EntityNotFoundException e) {
@@ -75,6 +70,20 @@ public class ProductService {
             throw new ResourceNotFoundException("ID invalid. Resource not found!");
         } catch (DataIntegrityViolationException e) {
             throw new DataBaseException("Integrity violation!");
+        }
+    }
+
+    private void copyDTOtoEntity(ProductDTO productDTO, Product product) {
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setDate(productDTO.getDate());
+        product.setImgUrl(productDTO.getImgUrl());
+        product.setPrice(productDTO.getPrice());
+
+        product.getCategories().clear();
+        for (CategoryDTO catDTO : productDTO.getCategories()) {
+            Category category = categoryRepository.getOne(catDTO.getId());
+            product.getCategories().add(category);
         }
     }
 }

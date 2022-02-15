@@ -50,9 +50,9 @@ public class ProductResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO, @PathVariable Long id) {
-        ProductDTO dto = service.update(productDTO, id);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
+        ProductDTO productDTO = service.update(id, dto);
+        return ResponseEntity.ok().body(productDTO);
     }
 
     @DeleteMapping("/{id}")
