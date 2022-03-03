@@ -29,10 +29,8 @@ public class ProductRepositoryTests {
 	@Test
 	public void deleteShouldDeleteObjectWhenIdExists() {
 		
-		repository.deleteById(existingId);
-		
-		Optional<Product> result = repository.findById(existingId);
-		
+		repository.deleteById(existingId);		
+		Optional<Product> result = repository.findById(existingId);		
 		Assertions.assertFalse(result.isPresent());
 	}
 	
