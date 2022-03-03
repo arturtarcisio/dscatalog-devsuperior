@@ -1,21 +1,23 @@
 package io.github.dscatalog.services;
 
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import io.github.dscatalog.dto.CategoryDTO;
 import io.github.dscatalog.entities.Category;
 import io.github.dscatalog.repositories.CategoryRepository;
 import io.github.dscatalog.services.exceptions.AttributeNullOrEmptyException;
 import io.github.dscatalog.services.exceptions.DataBaseException;
 import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -24,8 +26,8 @@ public class CategoryService {
     private CategoryRepository repository;
 
     @Transactional(readOnly = true)
-    public Page<CategoryDTO> findAllPaged (PageRequest pageRequest) {
-        Page<Category> list = repository.findAll(pageRequest);
+    public Page<CategoryDTO> findAllPaged (Pageable pageable) {
+        Page<Category> list = repository.findAll(pageable);
         return list.map(CategoryDTO::new);
     }
 
