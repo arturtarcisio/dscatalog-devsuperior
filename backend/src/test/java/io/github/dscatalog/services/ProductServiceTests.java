@@ -38,8 +38,7 @@ public class ProductServiceTests {
 	public void deleteShouldDoNothingWhenIdExists() {
 		Assertions.assertDoesNotThrow(() -> {
 			service.delete(existingId);
-		});
-		
+		});		
 		Mockito.verify(repository, Mockito.times(1)).deleteById(existingId);
 	}
 	
@@ -47,8 +46,7 @@ public class ProductServiceTests {
 	public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
 		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
 			service.delete(nonExistentId);
-		});
-		
+		});		
 		Mockito.verify(repository, Mockito.times(1)).deleteById(nonExistentId);
 	}
 
