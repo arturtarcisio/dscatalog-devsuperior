@@ -54,6 +54,7 @@ public class ProductServiceTests {
 		
 		// Simulando o find by id
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product));
+		Mockito.when(repository.findById(nonExistentId)).thenReturn(Optional.empty());
 	}
 	
 	@InjectMocks
