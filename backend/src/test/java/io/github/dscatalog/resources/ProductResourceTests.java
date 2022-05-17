@@ -78,7 +78,7 @@ public class ProductResourceTests {
 		doThrow(EmptyResultDataAccessException.class).when(service).delete(nonExistentId);
 		doThrow(DataIntegrityViolationException.class).when(service).delete(idWithDataIntegrityViolation);
 		
-		//Created
+		//Insert
 		when(service.insert(ArgumentMatchers.any())).thenReturn(productDTO);
 		
 	}
