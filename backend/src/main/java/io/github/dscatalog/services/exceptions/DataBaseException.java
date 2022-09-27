@@ -2,7 +2,12 @@ package io.github.dscatalog.services.exceptions;
 
 public class DataBaseException extends RuntimeException{
 
-    public DataBaseException(String msg) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public DataBaseException(String msg) {
         super(msg);
     }
 }

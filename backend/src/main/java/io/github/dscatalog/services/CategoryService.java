@@ -45,9 +45,8 @@ public class CategoryService {
             throw new AttributeNullOrEmptyException("Every attribute of object must be filled.");
         }
 
-        Category category = Category.builder()
-                .name(categoryDTO.getName())
-                .build();
+        Category category = new Category();
+        category.setName(categoryDTO.getName());
 
         Category savedCategory = repository.save(category);
         return new CategoryDTO(savedCategory);

@@ -1,14 +1,15 @@
 package io.github.dscatalog.resources.exceptions;
 
-import io.github.dscatalog.services.exceptions.DataBaseException;
-import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
+import java.time.Instant;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.Instant;
+import io.github.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
 public class ResourceNotFoundExceptionHandler {
